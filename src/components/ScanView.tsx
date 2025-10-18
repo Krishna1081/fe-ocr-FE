@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { QrCode, Nfc, Camera, X, FileImage } from 'lucide-react';
 import { qrDetectionService } from '../services/qrDetection';
-import { DatabaseService } from '../lib/mongodb';
+import { DatabaseService } from '../lib/supabase';
 
 type ScanMode = 'qr' | 'nfc' | 'text' | null;
 
