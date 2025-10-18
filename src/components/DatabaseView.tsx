@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Database, Search, Calendar, User, Trash2, Eye, X } from 'lucide-react';
-import { DatabaseService, StructuredData } from '../lib/mongodb';
+import { DatabaseService, StructuredData } from '../lib/mongodb.ts';
  
 function DatabaseView() {
   const [searchQuery, setSearchQuery] = useState('');
