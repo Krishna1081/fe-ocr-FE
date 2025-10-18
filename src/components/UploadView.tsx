@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { Upload, X, FileImage, Loader } from 'lucide-react';
 import { qrDetectionService } from '../services/qrDetection';
-import { DatabaseService } from '../lib/mongodb.ts';
+import { DatabaseService } from '../lib/mongodb';
 
 interface UploadedFile {
   id: string;
