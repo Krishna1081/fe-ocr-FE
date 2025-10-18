@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Database, Search, Calendar, User, Trash2, Eye, X } from 'lucide-react';
-import { DatabaseService, StructuredData } from '../lib/supabase';
-
+import { DatabaseService, StructuredData } from '../lib/mongodb';
+ 
 function DatabaseView() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'text_scan' | 'file_upload'>('all');
@@ -9,7 +9,7 @@ function DatabaseView() {
   const [loading, setLoading] = useState(true);
   const [selectedEntry, setSelectedEntry] = useState<StructuredData | null>(null);
   const [showDetails, setShowDetails] = useState(false);
-
+//db integration changed to nosql
   // Load structured data from database
   useEffect(() => {
     const loadData = async () => {
@@ -23,12 +23,12 @@ function DatabaseView() {
         setLoading(false);
       }
     };
-
+ 
     loadData();
   }, []);
-
+ 
   const filteredData = structuredData.filter((entry) => {
-    const matchesSearch = 
+    const matchesSearch =
       entry.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       entry.company?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       entry.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -36,7 +36,7 @@ function DatabaseView() {
     const matchesFilter = filterType === 'all' || entry.source === filterType;
     return matchesSearch && matchesFilter;
   });
-
+ 
   const getSourceColor = (source: string) => {
     switch (source) {
       case 'text_scan':
@@ -47,13 +47,13 @@ function DatabaseView() {
         return 'bg-gray-100 text-gray-700';
     }
   };
-
+ 
   const handleViewDetails = (entry: StructuredData) => {
     setSelectedEntry(entry);
     setShowDetails(true);
   };
-
-  const handleDeleteEntry = async (id: number) => {
+ 
+  const handleDeleteEntry = async (id: string) => {
     if (confirm('Are you sure you want to delete this entry?')) {
       try {
         await DatabaseService.deleteStructuredData(id);
@@ -63,15 +63,15 @@ function DatabaseView() {
       }
     }
   };
-
-
+ 
+ 
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
         <h2 className="text-2xl font-bold text-gray-800">Database</h2>
       </div>
-
+ 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
         <div className="max-w-6xl mx-auto space-y-6">
@@ -89,7 +89,7 @@ function DatabaseView() {
                   className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 outline-none transition-all"
                 />
               </div>
-
+ 
               {/* Filter */}
               <div className="flex gap-2">
                 <button
@@ -125,7 +125,7 @@ function DatabaseView() {
               </div>
             </div>
           </div>
-
+ 
           {/* Data Grid */}
           {loading ? (
             <div className="col-span-2 bg-white rounded-2xl shadow-md border border-gray-100 p-12">
@@ -177,7 +177,7 @@ function DatabaseView() {
                         </button>
                       </div>
                     </div>
-
+ 
                     <div className="space-y-2 mb-4">
                       {entry.name && (
                         <div className="flex items-center gap-2">
@@ -204,7 +204,7 @@ function DatabaseView() {
                         </div>
                       )}
                     </div>
-
+ 
                     <div className="flex items-center gap-4 text-sm text-gray-500">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
@@ -244,7 +244,7 @@ function DatabaseView() {
           )}
         </div>
       </div>
-
+ 
       {/* Details Modal */}
       {showDetails && selectedEntry && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -303,7 +303,7 @@ function DatabaseView() {
                   </div>
                 )}
               </div>
-
+ 
               {/* Address */}
               {selectedEntry.address && (
                 <div className="bg-gray-50 rounded-lg p-4">
@@ -311,7 +311,7 @@ function DatabaseView() {
                   <p className="text-gray-800 font-medium">{selectedEntry.address}</p>
                 </div>
               )}
-
+ 
               {/* Other Info */}
               {selectedEntry.other_info && selectedEntry.other_info.length > 0 && (
                 <div className="bg-gray-50 rounded-lg p-4">
@@ -323,7 +323,7 @@ function DatabaseView() {
                   </div>
                 </div>
               )}
-
+ 
               {/* Processing Info */}
               <div className="bg-blue-50 rounded-lg p-4">
                 <label className="text-sm font-medium text-gray-600">Processing Information</label>
@@ -348,7 +348,7 @@ function DatabaseView() {
                   </div>
                 </div>
               </div>
-
+ 
               {/* Raw Text */}
               {selectedEntry.raw_text && (
                 <div className="bg-gray-50 rounded-lg p-4">
@@ -365,5 +365,5 @@ function DatabaseView() {
     </div>
   );
 }
-
+ 
 export default DatabaseView;
