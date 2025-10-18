@@ -9,7 +9,7 @@ function DatabaseView() {
   const [loading, setLoading] = useState(true);
   const [selectedEntry, setSelectedEntry] = useState<StructuredData | null>(null);
   const [showDetails, setShowDetails] = useState(false);
-//db integration changed to nosql
+  //db integration changed to nosql
   // Load structured data from database
   useEffect(() => {
     const loadData = async () => {
